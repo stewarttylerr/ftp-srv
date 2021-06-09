@@ -17,6 +17,9 @@
   <a href="https://circleci.com/gh/autovance/workflows/ftp-srv/tree/master">
     <img alt="circleci" src="https://img.shields.io/circleci/project/github/autovance/ftp-srv/master.svg?style=for-the-badge" />
   </a>
+  <a href="https://www.deepcode.ai/app/gh/autovance/ftp-srv/_/dashboard?utm_content=gh%2Fautovance%2Fftp-srv">
+    <img alt="circleci" src="https://www.deepcode.ai/api/gh/badge?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwbGF0Zm9ybTEiOiJnaCIsIm93bmVyMSI6ImF1dG92YW5jZSIsInJlcG8xIjoiZnRwLXNydiIsImluY2x1ZGVMaW50IjpmYWxzZSwiYXV0aG9ySWQiOjIxMTc2LCJpYXQiOjE2MjMxOTIzMDd9.YEjY3vkLDqts3SJSbnjzG_uG1JAHsNVELnmoJRQUHp8" />
+  </a>
 </p>
 
 ---
