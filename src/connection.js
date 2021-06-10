@@ -75,13 +75,13 @@ class FtpConnection extends EventEmitter {
       .finally(() => this.commandSocket && this.commandSocket.destroy());
   }
 
-  login(username, password) {
+  login(username, password, host) {
     return Promise.try(() => {
       const loginListeners = this.server.listeners('login');
       if (!loginListeners || !loginListeners.length) {
         if (!this.server.options.anonymous) throw new errors.GeneralError('No "login" listener setup', 500);
       } else {
-        return this.server.emitPromise('login', {connection: this, username, password});
+        return this.server.emitPromise('login', {connection: this, username, password, host});
       }
     })
     .then(({root, cwd, fs, blacklist = [], whitelist = []} = {}) => {

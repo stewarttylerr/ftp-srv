@@ -8,7 +8,7 @@ module.exports = {
 
     const password = command.arg;
     if (!password) return this.reply(501, 'Must provide password');
-    return this.login(this.username, password)
+    return this.login(this.username, password, this.host)
     .then(() => {
       return this.reply(230);
     })

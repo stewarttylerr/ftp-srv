@@ -53,7 +53,7 @@ export class FtpConnection extends EventEmitter {
 	secure: boolean
 
 	close (code: number, message: number): Promise<any>
-	login (username: string, password: string): Promise<any>
+	login (username: string, password: string, host: string): Promise<any>
 	reply (options: number | Object, ...letters: Array<any>): Promise<any>
 
 }
@@ -98,11 +98,24 @@ export class FtpServer extends EventEmitter {
 
     close(): any;
 
+  on(event: "virtualhost", listener: (
+    data: {
+      connection: FtpConnection,
+      host: string
+    },
+    resolve: (config: {
+      motd?: Array<string>,
+      anonymous?: boolean
+    }) => void,
+    reject: (err?: Error) => void
+  ) => void): this
+
 	on(event: "login", listener: (
 		data: {
 			connection: FtpConnection,
 			username: string,
-			password: string
+			password: string,
+      host: string
 		},
 		resolve: (config: {
             fs?: FileSystem,

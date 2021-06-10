@@ -7,9 +7,11 @@ module.exports = {
     this.username = command.arg;
     if (!this.username) return this.reply(501, 'Must provide username');
 
-    if (this.server.options.anonymous === true && this.username === 'anonymous' ||
-        this.username === this.server.options.anonymous) {
-      return this.login(this.username, '@anonymous')
+    if (this._vh_anonymous === undefined
+      ? (this.server.options.anonymous === true && this.username === 'anonymous' || this.username === this.server.options.anonymous)
+      : (this._vh_anonymous === true && this.username === 'anonymous' || this.username === this._vh_anonymous)
+    ) {
+      return this.login(this.username, '@anonymous', this.host)
       .then(() => {
         return this.reply(230);
       })

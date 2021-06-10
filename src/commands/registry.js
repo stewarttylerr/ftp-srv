@@ -9,6 +9,7 @@ const commands = [
   require('./registration/dele'),
   require('./registration/feat'),
   require('./registration/help'),
+  require('./registration/host'),
   require('./registration/list'),
   require('./registration/mdtm'),
   require('./registration/mkd'),
