@@ -88,9 +88,18 @@ describe('FileSystem', function () {
       expect(result.fsPath).to.equal(
         nodePath.resolve('/tmp/ftp-srv'));
     });
-
     it('cannot escape root - backslash prefix', function () {
       const result = fs._resolvePath('\\/../../../../../../');
+      expect(result).to.be.an('object');
+      expect(result.clientPath).to.equal(
+        nodePath.normalize('/'));
+      expect(result.fsPath).to.equal(
+        nodePath.resolve('/tmp/ftp-srv'));
+    });
+
+    it('cannot escape root - win, escaped', function () {
+      // eslint-disable-next-line no-useless-escape
+      const result = fs._resolvePath('\/../../../../../../');
       expect(result).to.be.an('object');
       expect(result.clientPath).to.equal(
         nodePath.normalize('/'));

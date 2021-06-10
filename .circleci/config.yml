@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@4.1.0
+  win: circleci/windows@2.2.0
 
 commands:
   setup_git_bot:
@@ -14,17 +15,37 @@ commands:
             git config --global user.email bot@autovance.com
 
 executors:
-  node-lts:
-    parameters:
-      node-version:
-        type: string
-        default: lts
+  linux:
     docker:
-      - image: cimg/node:<< parameters.node-version >>
+      - image: cimg/base:2020.01
+  win: win/default
+  node:
+    docker:
+      - image: cimg/node:lts
 
 jobs:
+
+  win-test:
+    parameters:
+      version:
+        type: string
+    executor: win
+    steps:
+      - checkout
+      - run: nvm install << parameters.version >>
+      - run: nvm use << parameters.version >>
+      - restore_cache:
+          keys:
+              - node-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run: npm ci
+      - save_cache:
+          key: node-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          paths:
+              - ~/.npm
+      - run: npm test
+
   lint:
-    executor: node-lts
+    executor: node
     steps:
       - checkout
       - node/install-packages
@@ -33,7 +54,7 @@ jobs:
           command: npm run verify
 
   release_dry_run:
-    executor: node-lts
+    executor: node
     steps:
       - checkout
       - node/install-packages
@@ -45,7 +66,7 @@ jobs:
             npx semantic-release --dry-run
 
   release:
-    executor: node-lts
+    executor: node
     steps:
       - checkout
       - node/install-packages
@@ -61,20 +82,21 @@ workflows:
   test:
     jobs:
       - lint
+      - win-test:
+          matrix:
+            parameters:
+              version: ['10.23', '12.20', '14.15', '15.4']
       - node/test:
           matrix:
             parameters:
-              version:
-                - '10.23'
-                - '12.20'
-                - '14.15'
-                - 'current'
+              version: ['10.23', '12.20', '14.15', 'current']
       - release_dry_run:
           filters:
             branches:
               only: master
           requires:
             - node/test
+            - win-test
             - lint
       - hold_release:
           type: approval
